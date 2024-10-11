@@ -1,6 +1,7 @@
 """This module is for scraping biddytarot.com"""
 
-from typing import Iterable, List
+import json
+from typing import Dict, Iterable, List
 import scrapy
 from pathlib import Path
 
@@ -60,6 +61,7 @@ class BiddySpider(scrapy.Spider):
         f"{BASE_URL}major-arcana/{major_arcana_card}"
         for major_arcana_card in MAJOR_ARCANA
     ]
+    biddy_tarot_data = {}
 
     @staticmethod
     def build_minor_arcana_urls() -> List[str]:
@@ -74,18 +76,60 @@ class BiddySpider(scrapy.Spider):
         return urls
 
     def start_requests(self) -> Iterable[scrapy.Request]:
-        yield scrapy.Request(url=self.major_arcana_urls[0], callback=self.parse)
-        # for url in self.major_arcana_urls + self.build_minor_arcana_urls():
-        # yield scrapy.Request(url=url, callback=self.parse)
+        for url in self.major_arcana_urls + self.build_minor_arcana_urls():
+            yield scrapy.Request(url=url, callback=self.parse)
+
+    def get_upright_text(self, response) -> Dict[str, str]:
+        """Find and join Upright card texts"""
+        texts = response.xpath(
+            "//h2[contains(text(), 'Upright')]/following-sibling::p/text()"
+        ).getall()
+        return "".join(texts)
+
+    def get_reversed_text(self, response) -> Dict[str, str]:
+        """Find and join Reversed card texts"""
+        texts = response.xpath(
+            "//h2[contains(text(), 'Reversed')]/following-sibling::p/text()"
+        ).getall()
+        return "".join(texts)
+
+    def keyword_xpath(self, card_direction, keyword_position) -> str:
+        """Xpath string for finding the keywords of a card"""
+        return (
+            f"//h3[contains(text(), 'Keywords')]/following-sibling::p[{keyword_position}]/span"
+            + f"[contains(text(), '{card_direction}')]/parent::p/text()"
+        )
+
+    def get_keywords_text(self, response) -> Dict[str, str]:
+        """Find and join upright and reversed keywords card texts"""
+        reversed_keywords = (
+            response.xpath(self.keyword_xpath("UPRIGHT", 1)).get().strip()
+        )
+        upright_keywords = (
+            response.xpath(self.keyword_xpath("REVERSED", 2)).get().strip()
+        )
+        return {
+            "reversed": reversed_keywords,
+            "upright": upright_keywords,
+        }
+
+    def get_card_description(self, response) -> str:
+        """Find and join upright and reversed keywords card texts"""
+        return response.xpath(
+            "//h3[contains(text(), 'Description')]/following-sibling::p/text()"
+        ).get()
 
     # pylint: disable=arguments-differ
     def parse(self, response):
-        page = response.url.split("/")[-2]
-        filename = f"quotes-{page}.html"
-        Path(filename).write_bytes(response.body)
-        self.log(f"Saved file {filename}")
-        # for card in response.css(".tarot-card-summary"):
-        #     yield {
-        #         "name": card.css("h3::text").get(),
-        #         "meaning": card.css("p::text").get(),
-        #     }
+        card_name = response.url.split("/")[-2]
+        self.biddy_tarot_data[card_name] = {
+            "description": self.get_card_description(response),
+            "keywords": self.get_keywords_text(response),
+            "upright": self.get_upright_text(response),
+            "reversed": self.get_reversed_text(response),
+        }
+
+    def closed(self, reason="finished"):
+        """Write the accumulated results to a JSON file once spider is done"""
+        with open("biddytarot.json", "w", encoding="utf-8") as f:
+            json.dump(self.biddy_tarot_data, f, ensure_ascii=False)
