@@ -14,15 +14,15 @@ class CaroleInterpreter:
 
     def load_biddy_data(self):
         """Load the BiddyTarot data from JSON"""
-        print("wd", os.getcwd())
-        with open("biddytarot.json", "r", encoding="utf-8") as file:
+        file_path = os.path.abspath("./biddy/biddy/biddytarot.json")
+        with open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
-    def retrieve_card_descriptions(self, cards_info):
+    def retrieve_card_descriptions(self, cards):
         """Retrieve descriptions for all cards pulled"""
         biddy = self.load_biddy_data()
         descriptions = []
-        for card, card_direction in cards_info:
+        for card, card_direction in cards:
             descriptions.append(
                 f"""
           Card: {card}
@@ -33,7 +33,7 @@ class CaroleInterpreter:
             )
         return "".join(descriptions)
 
-    def create_prompt(self, cards_info, spread_info):
+    def create_prompt(self, cards, tarot_spread):
         """Create the system prompt"""
         return f"""
           You are a tarot card interpreter and expert. The user will provide you with a general question they're seeking clarity on, 
@@ -44,19 +44,18 @@ class CaroleInterpreter:
 
 
           The user has supplied the following information about the tarot spread:
-          Type of tarot spread: {spread_info}
-          Cards pulled in order: {cards_info}
+          Type of tarot spread: {tarot_spread}
+          Cards pulled in order: {cards}
 
           Use the additional data supplied by BiddyTarot.com that was scraped and saved as a json file. The data is provided here in json format for you to use in the interpretation:
-          {self.retrieve_card_descriptions(cards_info)}
+          {self.retrieve_card_descriptions(cards)}
 
           When you supply the answer, start first by listing each card's keywords at the beginning. 
         """
 
-    def generate_interpretation(self, cards_info, user_question, spread_info):
+    def generate_interpretation(self, cards, user_question, tarot_spread):
         """Generate the interpretation for the tarot cards pulled."""
-        system_message = self.create_prompt(cards_info, spread_info)
-        print("MESSAGE", system_message)
+        system_message = self.create_prompt(cards, tarot_spread)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
@@ -64,19 +63,19 @@ class CaroleInterpreter:
                 {"role": "user", "content": f"{user_question}"},
             ],
         )
-        return response.choices[0].message
+        return response.choices[0].message.content
 
 
-interpreter = CaroleInterpreter()
+# interpreter = CaroleInterpreter()
 
-print(
-    interpreter.generate_interpretation(
-        cards_info=[
-            ("lovers", "upright"),
-            ("world", "reversed"),
-            ("three-of-cups", "upright"),
-        ],
-        user_question="What should I consider before I head into this weekend?",
-        spread_info="Past, Present, Future",
-    )
-)
+# print(
+#     interpreter.generate_interpretation(
+#         cards=[
+#             ("lovers", "upright"),
+#             ("world", "reversed"),
+#             ("three-of-cups", "upright"),
+#         ],
+#         user_question="What should I consider before I head into this weekend?",
+#         tarot_spread="Past, Present, Future",
+#     )
+# )
