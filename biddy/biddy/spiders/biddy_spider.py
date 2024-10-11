@@ -102,10 +102,10 @@ class BiddySpider(scrapy.Spider):
 
     def get_keywords_text(self, response) -> Dict[str, str]:
         """Find and join upright and reversed keywords card texts"""
-        reversed_keywords = (
+        upright_keywords = (
             response.xpath(self.keyword_xpath("UPRIGHT", 1)).get().strip()
         )
-        upright_keywords = (
+        reversed_keywords = (
             response.xpath(self.keyword_xpath("REVERSED", 2)).get().strip()
         )
         return {
