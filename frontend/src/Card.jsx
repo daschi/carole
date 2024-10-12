@@ -1,34 +1,53 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import styled from "styled-components";
 
+const CardContainer = styled.div`
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  height: 30em;
+  width: 16em;
+  flex-flow: column nowrap;
+  padding: 1em;
+  margin: 1em;
+`;
 
-function App() {
-  const [count, setCount] = useState(0);
+const SelectCardText = styled.h3`
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  align-self: top;
+`;
 
+const SelectArcanaButton = styled.button`
+  height: 3em;
+  width: 100%;
+`;
+
+function MinorArcanaSelect() {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>This is so cool</p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <SelectArcanaButton>Minor Arcana</SelectArcanaButton>
     </>
   );
 }
 
-export default App;
+function MajorArcanaSelect() {
+  return (
+    <>
+      <SelectArcanaButton>Major Arcana</SelectArcanaButton>
+    </>
+  );
+}
+
+function Card() {
+  return (
+    <CardContainer>
+      <SelectCardText>Select a card:</SelectCardText>
+      <MinorArcanaSelect />
+      <MajorArcanaSelect />
+    </CardContainer>
+  );
+}
+
+export default Card;
