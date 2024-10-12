@@ -22,7 +22,9 @@ class CaroleInterpreter:
         """Retrieve descriptions for all cards pulled"""
         biddy = self.load_biddy_data()
         descriptions = []
-        for card, card_direction in cards:
+        # Add card direction to the frontend
+        card_direction = "upright"
+        for card in cards:
             descriptions.append(
                 f"""
           Card: {card}
@@ -64,18 +66,3 @@ class CaroleInterpreter:
             ],
         )
         return response.choices[0].message.content
-
-
-# interpreter = CaroleInterpreter()
-
-# print(
-#     interpreter.generate_interpretation(
-#         cards=[
-#             ("lovers", "upright"),
-#             ("world", "reversed"),
-#             ("three-of-cups", "upright"),
-#         ],
-#         user_question="What should I consider before I head into this weekend?",
-#         tarot_spread="Past, Present, Future",
-#     )
-# )
