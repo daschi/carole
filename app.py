@@ -23,7 +23,7 @@ def interpret_tarot():
     # for local development:
     try:
         # Read the content of the markdown file
-        with open("example_response.md", "r", encoding="utf-8") as markdown_file:
+        with open("./data/example_response.md", "r", encoding="utf-8") as markdown_file:
             content = markdown_file.read()
 
             # Return the content as a response

@@ -14,7 +14,7 @@ class CaroleInterpreter:
 
     def load_biddy_data(self):
         """Load the BiddyTarot data from JSON"""
-        file_path = os.path.abspath("./biddy/biddy/biddytarot.json")
+        file_path = os.path.abspath("./data/biddytarot.json")
         with open(file_path, "r", encoding="utf-8") as file:
             return json.load(file)
 
