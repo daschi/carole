@@ -1,4 +1,6 @@
+import PropTypes, { useState } from "react";
 import styled from "styled-components";
+import CardSelector from "./CardSelector";
 
 const CardContainer = styled.div`
   background-color: #d9d9d9;
@@ -13,41 +15,41 @@ const CardContainer = styled.div`
   margin: 1em;
 `;
 
-const SelectCardText = styled.h3`
+const SelectCardText = styled.label`
   font-family: "Poppins", sans-serif;
   text-align: center;
   align-self: top;
 `;
 
-const SelectArcanaButton = styled.button`
-  height: 3em;
-  width: 100%;
-`;
+function Card({ onChange }) {
+  const [selectedCard, setSelectedCard] = useState();
+  const handleSelectCard = (card) => {
+    setSelectedCard(card);
+    onChange(card.value);
+  };
 
-function MinorArcanaSelect() {
-  return (
-    <>
-      <SelectArcanaButton>Minor Arcana</SelectArcanaButton>
-    </>
-  );
-}
-
-function MajorArcanaSelect() {
-  return (
-    <>
-      <SelectArcanaButton>Major Arcana</SelectArcanaButton>
-    </>
-  );
-}
-
-function Card() {
   return (
     <CardContainer>
-      <SelectCardText>Select a card:</SelectCardText>
-      <MinorArcanaSelect />
-      <MajorArcanaSelect />
+      {selectedCard ? (
+        <>
+          <div>You selected {selectedCard.cardName}</div>
+          <button onClick={() => setSelectedCard(null)}>
+            Select a different card
+          </button>
+        </>
+      ) : (
+        <>
+          <SelectCardText>Select one card:</SelectCardText>
+          <CardSelector type="major" onChange={handleSelectCard} />
+          <CardSelector type="minor" onChange={handleSelectCard} />
+        </>
+      )}
     </CardContainer>
   );
 }
+
+Card.propTypes = {
+  onChange: PropTypes.func,
+};
 
 export default Card;
