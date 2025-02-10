@@ -26,7 +26,7 @@ function App() {
       const tarot_spread = "Past, Present, Future";
 
       // Send request to Flask API
-      const response = await fetch("http://127.0.0.1:5000/interpret", {
+      const response = await fetch("http://127.0.0.1:5001/interpret", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
