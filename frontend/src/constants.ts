@@ -1,4 +1,9 @@
-export const MAJOR_ARCANA_CARDS = [
+export type TarotCard = {
+  cardName: string;
+  value: string;
+};
+
+export const MAJOR_ARCANA_CARDS: TarotCard[] = [
   { cardName: "The Fool", value: "fool" },
   { cardName: "The Magician", value: "magician" },
   { cardName: "The High Priestess", value: "high-priestess" },
@@ -23,7 +28,7 @@ export const MAJOR_ARCANA_CARDS = [
   { cardName: "The World", value: "world" },
 ];
 
-export const MINOR_ARCANA_CARDS = [
+export const MINOR_ARCANA_CARDS: TarotCard[] = [
   // Swords
   { cardName: "Ace of Swords", value: "ace-of-swords" },
   { cardName: "Two of Swords", value: "two-of-swords" },

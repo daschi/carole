@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Spread from "./Spread";
 import Markdown from "react-markdown";
 import "./App.css";
+import { TarotCard } from "./constants";
 
 const Intro = styled.h1`
   font-family: "Roboto";
@@ -16,10 +17,10 @@ const AppContainer = styled.div`
   flex-flow: column;
 `;
 
-function App() {
-  const [interpretation, setInterpretation] = useState();
+function App(): JSX.Element {
+  const [interpretation, setInterpretation] = useState<string>();
 
-  const handleSubmit = async (cards) => {
+  const handleSubmit = async (cards: TarotCard[]) => {
     try {
       const user_question =
         "What should I consider before I head into this weekend?";
@@ -32,7 +33,7 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cards: cards,
+          cards: cards.map((card) => card.value),
           question: user_question,
           spread: tarot_spread,
         }),

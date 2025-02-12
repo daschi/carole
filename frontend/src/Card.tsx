@@ -1,6 +1,7 @@
-import PropTypes, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import CardSelector from "./CardSelector";
+import { TarotCard } from "./constants";
 
 const CardContainer = styled.div`
   background-color: #d9d9d9;
@@ -21,11 +22,15 @@ const SelectCardText = styled.label`
   align-self: top;
 `;
 
-function Card({ onChange }) {
-  const [selectedCard, setSelectedCard] = useState();
-  const handleSelectCard = (card) => {
+type CardProps = {
+  onChange: (card: TarotCard) => void;
+};
+
+function Card({ onChange }: CardProps) {
+  const [selectedCard, setSelectedCard] = useState<TarotCard | null>();
+  const handleSelectCard = (card: TarotCard) => {
     setSelectedCard(card);
-    onChange(card.value);
+    onChange(card);
   };
 
   return (
@@ -47,9 +52,5 @@ function Card({ onChange }) {
     </CardContainer>
   );
 }
-
-Card.propTypes = {
-  onChange: PropTypes.func,
-};
 
 export default Card;

@@ -1,7 +1,8 @@
-import PropTypes, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Card from "./Card";
 import "./App.css";
+import { TarotCard } from "./constants";
 
 const SpreadContainer = styled.div`
   display: flex;
@@ -10,12 +11,16 @@ const SpreadContainer = styled.div`
 
 const SubmitButton = styled.button``;
 
-function Spread({ handleSubmit }) {
-  const [cards, setCards] = useState([]);
+type SpreadProps = {
+  handleSubmit: (cards: TarotCard[]) => void;
+};
 
-  const handleSelectCard = (position, value) => {
+function Spread({ handleSubmit }: SpreadProps): JSX.Element {
+  const [cards, setCards] = useState<TarotCard[]>([]);
+
+  const handleSelectCard = (position: number, card: TarotCard) => {
     const cardsUpdate = [...cards];
-    cardsUpdate[position] = value;
+    cardsUpdate[position] = card;
     setCards(cardsUpdate);
   };
 
@@ -26,7 +31,7 @@ function Spread({ handleSubmit }) {
           return (
             <Card
               key={position}
-              onChange={(value) => handleSelectCard(position, value)}
+              onChange={(card: TarotCard) => handleSelectCard(position, card)}
             />
           );
         })}
@@ -37,9 +42,5 @@ function Spread({ handleSubmit }) {
     </>
   );
 }
-
-Spread.propTypes = {
-  handleSubmit: PropTypes.func,
-};
 
 export default Spread;

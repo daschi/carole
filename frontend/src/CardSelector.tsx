@@ -1,12 +1,21 @@
-import PropTypes from "react";
-import { MAJOR_ARCANA_CARDS, MINOR_ARCANA_CARDS } from "./constants";
+import { MAJOR_ARCANA_CARDS, MINOR_ARCANA_CARDS, TarotCard } from "./constants";
 
-const allCards = {
+type AllCards = {
+  minor: TarotCard[];
+  major: TarotCard[];
+};
+
+const allCards: AllCards = {
   minor: MINOR_ARCANA_CARDS,
   major: MAJOR_ARCANA_CARDS,
 };
 
-function CardSelector({ type, onChange }) {
+type CardSelectorProps = {
+  type: keyof AllCards;
+  onChange: (card: TarotCard) => void;
+};
+
+function CardSelector({ type, onChange }: CardSelectorProps) {
   const cards = allCards[type];
 
   return (
@@ -15,7 +24,7 @@ function CardSelector({ type, onChange }) {
         id={`${type}-arcana`}
         onChange={(e) => {
           const card = cards.find((c) => c.value === e.target.value);
-          onChange(card);
+          if (card) onChange(card);
         }}
         style={{
           padding: "10px",
@@ -36,10 +45,5 @@ function CardSelector({ type, onChange }) {
     </div>
   );
 }
-
-CardSelector.propTypes = {
-  type: PropTypes.string,
-  onChange: PropTypes.func,
-};
 
 export default CardSelector;
