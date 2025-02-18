@@ -1,4 +1,5 @@
 import { MAJOR_ARCANA_CARDS, MINOR_ARCANA_CARDS, TarotCard } from "./constants";
+import { toTitleCase } from "./helpers";
 
 type AllCards = {
   minor: TarotCard[];
@@ -35,7 +36,7 @@ function CardSelector({ type, onChange }: CardSelectorProps) {
         }}
       >
         <option value="" disabled>
-          -- Select a Card --
+          -- {toTitleCase(type)} Arcana --
         </option>
         {cards.map((card) => (
           <option key={card.value} value={card.value}>

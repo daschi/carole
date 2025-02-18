@@ -4,7 +4,7 @@ import CardSelector from "./CardSelector";
 import { TarotCard } from "./constants";
 
 const CardContainer = styled.div`
-  background-color: #d9d9d9;
+  background-color: #bf677c;
   border-radius: 8px;
   display: flex;
   justify-content: space-evenly;

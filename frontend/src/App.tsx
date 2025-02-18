@@ -5,8 +5,9 @@ import Spread from "./Spread";
 import Markdown from "react-markdown";
 import "./App.css";
 import { TarotCard } from "./constants";
+import SpreadSelector, { TarotSpread } from "./SpreadSelector";
 
-const Intro = styled.h1`
+const Intro = styled.h2`
   font-family: "Roboto";
 `;
 
@@ -15,10 +16,13 @@ const Intro = styled.h1`
 const AppContainer = styled.div`
   display: flex;
   flex-flow: column;
+  background-color: #facada;
+  padding: 3rem;
 `;
 
 function App(): JSX.Element {
   const [interpretation, setInterpretation] = useState<string>();
+  const [spread, setSpread] = useState<TarotSpread>();
 
   const handleSubmit = async (cards: TarotCard[]) => {
     try {
@@ -47,10 +51,15 @@ function App(): JSX.Element {
     }
   };
 
+  const handleSelect = (spread: TarotSpread) => {
+    setSpread(spread);
+  };
+
   return (
     <AppContainer>
-      <Intro>Past, Present, Future Spread</Intro>
-      <Spread handleSubmit={handleSubmit} />
+      <Intro>Select a Spread</Intro>
+      <SpreadSelector onSelect={handleSelect} />
+      <Spread spread={spread} handleSubmit={handleSubmit} />
       {interpretation && <Markdown>{interpretation}</Markdown>}
     </AppContainer>
   );

@@ -3,52 +3,9 @@
 import json
 from typing import Dict, Iterable, List
 import scrapy
-from pathlib import Path
 
+from biddy.biddy.constants import MAJOR_ARCANA, MINOR_ARCANA, MINOR_CARDS
 
-MAJOR_ARCANA = [
-    "fool",
-    "magician",
-    "high-priestess",
-    "empress",
-    "emperor",
-    "hierophant",
-    "lovers",
-    "chariot",
-    "strength",
-    "hermit",
-    "wheel-of-fortune",
-    "justice",
-    "hanged-man",
-    "death",
-    "temperance",
-    "devil",
-    "tower",
-    "star",
-    "moon",
-    "sun",
-    "judgement",
-    "world",
-]
-
-MINOR_ARCANA = ["suit-of-cups", "suit-of-wands", "suit-of-swords", "suit-of-pentacles"]
-
-MINOR_CARDS = [
-    "ace",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "page",
-    "knight",
-    "queen",
-    "king",
-]
 
 BASE_URL = "https://www.biddytarot.com/tarot-card-meanings/"
 
@@ -129,7 +86,7 @@ class BiddySpider(scrapy.Spider):
             "reversed": self.get_reversed_text(response),
         }
 
-    def closed(self, reason="finished"):
+    def closed(self):
         """Write the accumulated results to a JSON file once spider is done"""
         with open("biddytarot.json", "w", encoding="utf-8") as f:
             json.dump(self.biddy_tarot_data, f, ensure_ascii=False)
