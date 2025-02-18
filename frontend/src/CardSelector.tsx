@@ -21,6 +21,7 @@ function CardSelector({ type, onChange }: CardSelectorProps) {
   return (
     <div style={{ margin: "20px" }}>
       <select
+        defaultValue=""
         id={`${type}-arcana`}
         onChange={(e) => {
           const card = cards.find((c) => c.value === e.target.value);
@@ -33,7 +34,7 @@ function CardSelector({ type, onChange }: CardSelectorProps) {
           border: "1px solid #ccc",
         }}
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           -- Select a Card --
         </option>
         {cards.map((card) => (
