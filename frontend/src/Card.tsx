@@ -28,6 +28,7 @@ type CardProps = {
 
 function Card({ onChange }: CardProps) {
   const [selectedCard, setSelectedCard] = useState<TarotCard | null>();
+  const [imgUrl, setImgUrl] = useState("");
   const handleSelectCard = (card: TarotCard) => {
     setSelectedCard(card);
     onChange(card);
@@ -37,7 +38,10 @@ function Card({ onChange }: CardProps) {
     <CardContainer>
       {selectedCard ? (
         <>
-          <div>You selected {selectedCard.cardName}</div>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Wands02.jpg/696px-Wands02.jpg"
+            alt="tarot card"
+          />
           <button onClick={() => setSelectedCard(null)}>
             Select a different card
           </button>
